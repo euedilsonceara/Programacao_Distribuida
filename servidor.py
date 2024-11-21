@@ -206,6 +206,9 @@ def gerenciar_cliente(cliente, identificador):
             if mensagem == 'CONTAR':
                 conta(cliente)
 
+            if mensagem == 'SAIR':
+                pass
+
             elif mensagem.startswith("JOGADA"):
                 _, linha, coluna = mensagem.split()
                 linha, coluna = int(linha), int(coluna)
