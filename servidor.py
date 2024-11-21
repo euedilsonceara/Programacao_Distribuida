@@ -1,13 +1,25 @@
-# Código do Servidor
+# CÓDIGO DESENVOLVIDO DURANTE A DISCIPLINA DE PROGRAMAÇÃO PARALELA E DISTRIBUÍDA (PPD)
+# UNIVERSIDADE: INSTITUTO FEDERAL DE EDUCAÇÃO, CIÊNCIA E TECNOLOGIA DO CEARÁ (IFCE) - CAMPUS FORTALEZA
+# CURSO: ENGENHARIA DA COMPUTAÇÃO
+# DATA: 20/11/2024
+# DENSENVOLVEDOR: JOSÉ EDILSON CEARÁ GOMES FILHO
+
+# INSTRUÇÕES
+# 1. EXECUTE PRIMEIRAMENTE O ARQUIVO servidor.py
+# 2. EM SEGUIDA EXECUTE O ARQUIVO jogador1.py EM UM TERMINAL DEDICADO
+# 3. FINALIZE EXECUTANDO O ARQUIVO jogador2.py EM UM OUTRO TERMINAL
+# 4. PRONTO! AGORA JOGUE E DESFRUTE DO JOGO OTHELLO (REVERSI), SEMPRE ACOMPANHANDO AS MENSAGENS NA TELA!
+
+##################################################################################################################
+
+# Importação das bibliotecas
 import socket
 import threading
 import time
 
-
 # Configurações do servidor
 HOST = '127.0.0.1'
 PORT = 5000
-
 
 # Inicializando o tabuleiro 8x8 para o jogo Othello
 tabuleiro = [
@@ -54,6 +66,7 @@ def passar_turno(jogador_atual):
     elif jogador_atual == '⚪':
         return '⚫'
     
+
 # Função para verificar se uma jogada é válida
 def jogada_valida(jogador, linha, coluna):
     
@@ -115,10 +128,12 @@ def contar_pecas():
     brancas = sum(linha.count('⚪') for linha in tabuleiro)
     return pretas, brancas
 
+# Função para mostrar a contagem das peças
 def conta(cliente):
     pecas_pretas, pecas_brancas = contar_pecas()
     cliente.send(f"{pecas_pretas} peças pretas ⚫".encode('utf-8'))
     cliente.send(f"{pecas_brancas} peças brancas ⚪\n".encode('utf-8'))
+
 
 # Função para determinar o vencedor
 def verificar_vencedor():
@@ -130,13 +145,13 @@ def verificar_vencedor():
     else:
         return 'EMPATE'  # Empate
 
-
+# Função para enviar o tabuleiro atualizado aos jogadores
 def enviar_tabuleiro_para_todos():
     tabuleiro_visualizado = "\n".join(["".join(linha) for linha in tabuleiro])
     for cliente in clientes:
         cliente.send(f"\nTabuleiro Atualizado:\n{tabuleiro_visualizado}\n".encode('utf-8'))
 
-
+# Função para dar início ao jogo e oferecer instruções
 def jogo_iniciado():
     for cliente in clientes:
         cliente.send("INSTRUÇÕES:\n".encode('utf-8'))
