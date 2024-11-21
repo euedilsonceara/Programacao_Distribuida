@@ -46,6 +46,14 @@ def enviar_jogada():
     coluna = int(entry_coluna.get())
     cliente.send(f"JOGADA {linha} {coluna}".encode('utf-8'))
 
+# Função para encerrar o cliente e enviar um comando ao servidor
+def encerrar_cliente():
+    try:
+        cliente.send("SAIR".encode('utf-8'))  # Envia o comando de encerramento
+    except:
+        pass  # Ignora erros ao enviar mensagem se o cliente já estiver desconectado
+    cliente.close()  # Fecha o socket
+    root.destroy()  # Fecha a janela do Tkinter
 
 # Interface gráfica com tkinter
 root = tk.Tk()
@@ -115,6 +123,10 @@ btn_desistir.grid(row=2, column=0, padx=285, pady=10, sticky="w")
 # Botão para contar peças
 btn_contar = tk.Button(root, text="Contar Peças", command=contar, bg="gray", fg="white")
 btn_contar.grid(row=2, column=0, padx=345, pady=10, sticky="w")
+
+
+# Vincula o evento de fechamento da janela ao encerrar_cliente
+root.protocol("WM_DELETE_WINDOW", encerrar_cliente)
 
 # Thread para receber mensagens
 thread_receber = threading.Thread(target=receber_mensagens)

@@ -264,12 +264,16 @@ def gerenciar_cliente(cliente, identificador):
                 enviar_mensagem_para_todos(f"Mensagem do Jogador {identificador}: {mensagem}\n")
 
     
-        except ConnectionAbortedError:
-            break
-        except:
-            if cliente in clientes:
-                clientes.remove(cliente)
-            cliente.close()
+        except ConnectionResetError:
+            # Captura a desconexão de um cliente
+            print(f"Jogador(a) {identificador} desconectado(a)!")
+            for oponente in clientes:
+                if oponente != cliente:
+                    oponente.send("Seu oponente se desconectou!\nVocê é o grande vencedor! 🏆".encode('utf-8'))
+            time.sleep(8)  # Dá tempo para o jogador ler a mensagem
+            for jogador in clientes:
+                jogador.close()
+            clientes.clear()
             break
 
 
